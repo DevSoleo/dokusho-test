@@ -6,4 +6,4 @@ COPY . .
 
 RUN ["ls"]
 
-CMD ["sh", "./target/release/test"]
+CMD ["ls"]
