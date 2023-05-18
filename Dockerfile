@@ -1,10 +1,16 @@
-FROM rust
+FROM node:lts-slim
 
-WORKDIR /usr/src/myapp
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install
 
 COPY . .
 
-RUN cargo install --path .
-RUN ls
+EXPOSE 3000
 
-CMD ["./target/release/test"]
+ENV MONGO_DB_HOST "localhost"
+ENV MONGO_DB_TIMEOUT "2000"
+
+CMD [ "npm", "start" ]
