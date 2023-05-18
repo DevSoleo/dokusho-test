@@ -24,4 +24,4 @@ socket.wait(server)
 
 hearbeat.start(socket.io)
 
-server.listen(9000)
+server.listen(3000)
