@@ -4,4 +4,4 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-CMD ["/usr/src/app/target/release/test"]
+CMD ["sh", "./target/release/test"]
