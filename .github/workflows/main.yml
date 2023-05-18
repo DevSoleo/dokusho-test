@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cargo run
       - run: |
           cargo build --release
           ls -la ./target/release/
+          ./target/release/test
