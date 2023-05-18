@@ -1,7 +1,9 @@
 FROM rust
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/myapp
 
-COPY ./target/release/test /bin/test-program
+COPY . .
 
-CMD ["/bin/test-program"]
+RUN cargo install --path ./target/release/
+
+CMD ["./target/release/test"]
