@@ -3,22 +3,41 @@ name: Scan code and Build Docker image
 on:
   workflow_dispatch:
   push:
-    tags:
-      - v2.**
+    branches: [ 'main' ]
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
+  sonarqube:
+    name: Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
+  build-image:
+    needs: sonarqube
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Build React Frontend
+        run: |
+          npm install --only=dev
+          npm run build
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -32,9 +51,6 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            # minimal
-            type=semver,pattern={{version}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
