@@ -4,6 +4,7 @@ WORKDIR /usr/src/myapp
 
 COPY . .
 
-RUN cargo install --path ./target/release/
+RUN cargo install --path .
+RUN ls
 
 CMD ["./target/release/test"]
