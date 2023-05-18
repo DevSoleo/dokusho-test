@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM rust
 
 WORKDIR /usr/src/app
 
