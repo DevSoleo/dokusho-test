@@ -2,9 +2,9 @@ FROM node:lts-slim
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-
-RUN npm install --omit=dev
+# Pipeline already download dependencies
+# COPY package*.json ./
+# RUN npm install --omit=dev
 
 COPY . .
 
