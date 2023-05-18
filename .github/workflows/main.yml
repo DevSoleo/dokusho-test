@@ -57,5 +57,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/devsoleo/${{ env.IMAGE_NAME }}:latest
+          tags: ghcr.io/devsoleo/testq:latest
           labels: ${{ steps.meta.outputs.labels }}
