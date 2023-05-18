@@ -2,8 +2,6 @@ FROM rust
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY ./target/release/test /bin/test-program
 
-RUN ["ls", "./target/release/"]
-
-CMD ["./target/release/test"]
+CMD ["/bin/test-program"]
