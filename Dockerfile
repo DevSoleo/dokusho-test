@@ -1,5 +1,7 @@
 FROM debian:bullseye-slim
 
+WORKDIR /usr/src/app
+
 COPY . .
 
-CMD ["./target/release/test"]
+CMD ["/usr/src/app/target/release/test"]
