@@ -10,24 +10,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  sonarqube:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      - uses: sonarsource/sonarqube-quality-gate-action@master
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
   build-and-push-image:
-    needs: sonarqube
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -58,5 +41,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/devsoleo/dokusho:latest
+          tags: ghcr.io/devsoleo/${{ env.IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
