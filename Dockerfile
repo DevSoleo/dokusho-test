@@ -4,6 +4,6 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN ["ls"]
+RUN ["ls ./target/release/"]
 
-CMD ["ls"]
+CMD ["ls ./target/release/"]
