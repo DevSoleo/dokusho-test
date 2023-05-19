@@ -9,7 +9,8 @@ exports.wait = (server) => {
 
     let User = mongodb.models.User
 
-    this.io.on('connection', (socket) => {        
+    this.io.on('connection', (socket) => {
+        console.log('Nouvelle connexion')
         socket.on('ask_for_create_user', (infos, callback) => {
             let [username, first_name, last_name, birthday, phone, email] = infos
 
@@ -170,12 +171,10 @@ exports.wait = (server) => {
             let content = infos[1]
 
             if (type == "first_name") {
-                console.log("f")
                 User.find({ "infos.first_name": content }, (err, arr) => {
                     callback(arr)
                 })
             } else if (type == "last_name") {
-                console.log("l", content)
                 User.find({ "infos.last_name": { $eq: content }}, (err, arr) => {
                     callback(arr)
                 })
