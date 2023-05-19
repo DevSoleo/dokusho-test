@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const logs = require('./logs')
 
+mongoose.set('strictQuery', false)
+
 exports.models = { User: mongoose.model('User', { username: String, infos: { first_name: String, last_name: String, birthday: String, phone: String, email: String }, time_bank: Number, status: Number, offers_end: Number }) }
 
 exports.connect = (uri) => {
