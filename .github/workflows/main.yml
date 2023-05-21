@@ -25,6 +25,7 @@ jobs:
     #    timeout-minutes: 5
     #    env:
     #      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
   build-image:
     # needs: sonarqube
     runs-on: ubuntu-latest
@@ -36,13 +37,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
-      - name: minisauras
-        uses: TeamTigers/minisauras@v2.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        with:
-          directory: './' # all files under 'src' directory
 
       - name: Installing dependencies
         run: npm install
