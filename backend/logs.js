@@ -30,16 +30,15 @@ exports.C_BG_MAGENTA = "\x1b[45m"
 exports.C_BG_CYAN = "\x1b[46m"
 exports.C_BG_WHITE = "\x1b[47m"
 
-function addZero(number) {
-    if (number < 10) number = '0' + number
-
-    return number
+function addZero(i) {
+    return i.toString().padStart(2, '0')
 }
 
 function isDaylightSavingTime(date) {
-    let januaryOffset = new Date(date.getFullYear(), 0, 1).getTimezoneOffset();
-    let julyOffset = new Date(date.getFullYear(), 6, 1).getTimezoneOffset();
-    return Math.max(januaryOffset, julyOffset) !== date.getTimezoneOffset();
+    const januaryOffset = new Date(date.getFullYear(), 0, 1).getTimezoneOffset()
+    const julyOffset = new Date(date.getFullYear(), 6, 1).getTimezoneOffset()
+
+    return Math.max(januaryOffset, julyOffset) !== date.getTimezoneOffset()
 }
 
 function getFormattedDate() {
@@ -47,8 +46,8 @@ function getFormattedDate() {
     let now = new Date(Date.now());
         now.setUTCHours(now.getUTCHours() + (isDaylightSavingTime(now) ? 2 : 1));
 
-    let date = now.getDate().toString().padStart(2, '0') + "-" + (now.getMonth() + 1).toString().padStart(2, '0') + "-" + now.getFullYear()
-    let time = now.getUTCHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0')
+    const date = addZero(now.getDate()) + "-" + addZero(now.getMonth() + 1) + "-" + now.getFullYear()
+    const time = addZero(now.getUTCHours()) + ":" + addZero(now.getMinutes()) + ":" + addZero(now.getSeconds())
 
     return date + " " + time
 }
@@ -59,9 +58,9 @@ exports.log = (source, content, file_path) => {
     let log_content = log_marker + content.replace(/\u001b[^m]*?m/g,"") + '\n'
     let log_content_console = log_marker + content
 
-	fs.appendFile(`logs/${file_path}`, log_content, () => {})
+	fs.appendFile(`./logs/${file_path}`, log_content, () => {})
 
-    fs.appendFile(`logs/global.log`, log_content, function () {
+    fs.appendFile(`./logs/global.log`, log_content, function () {
         console.log(log_content_console)
     })
 }
