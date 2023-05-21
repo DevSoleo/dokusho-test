@@ -1,6 +1,6 @@
 const config = require('dotenv').config()
 const express = require('express')
-const http = require('https')
+const http = require('http')
 
 const socket = require('./backend/socket')
 const hearbeat = require('./backend/heartbeat')
