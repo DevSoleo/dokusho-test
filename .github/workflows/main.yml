@@ -25,7 +25,28 @@ jobs:
     #    timeout-minutes: 5
     #    env:
     #      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
+  minify-code:
+    # needs: sonarqube
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write    
+      
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so auto-minify job can access it
+      - uses: actions/checkout@v2
+
+      - name: Auto Minify
+        uses: nizarmah/auto-minify@v2.1
+        with:
+          overwrite: true
+      - name: Auto committing minified files
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Github Action: Auto Minified JS and CSS files"
+          branch: ${{ github.ref }}
+
   build-image:
     # needs: sonarqube
     runs-on: ubuntu-latest
