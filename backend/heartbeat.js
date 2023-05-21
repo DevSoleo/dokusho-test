@@ -1,8 +1,8 @@
 const mongodb = require('./database')
 
-const heartbeatFrequency = 1000
-
 exports.start = (io) => {
+    const heartbeatFrequency = 1000
+    
     let User = mongodb.models.User
 
     // Heartbeat
