@@ -1,5 +1,7 @@
 const mongodb = require('./database')
 
+const heartbeatFrequency = 1000
+
 exports.start = (io) => {
     let User = mongodb.models.User
 
@@ -9,11 +11,11 @@ exports.start = (io) => {
         User.updateMany({ offers_end: { $lte: Date.now() } }, { offers_end: 0 }, () => {})
 
         // Reduction du temps pour les utilisateurs connectés ayant du temps restant et n'ayant pas d'offres
-        User.updateMany({ 'status': 1, time_bank: {$gte: 1000}, offers_end: { $lt: Date.now() } }, { $inc: { time_bank: -1000 } }, () => {})
+        User.updateMany({ 'status': 1, time_bank: {$gte: heartbeatFrequency}, offers_end: { $lt: Date.now() } }, { $inc: { time_bank: -heartbeatFrequency } }, () => {})
 
         // Envoi de la liste des utilisateurs connectés aux clients
         User.find({ $or: [ { 'status': 1 }, { 'status': 2 } ] }).sort({ status : 1 }).exec((err, arr) => {
             io.local.emit('sync', arr)
         })
-    }, 1000)
+    }, heartbeatFrequency)
 }
