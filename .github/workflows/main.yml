@@ -3,7 +3,8 @@ name: Scan code and Build Docker image
 on:
   workflow_dispatch:
   push:
-    branches: [ 'main' ]
+    tags:
+      - 2.*
 
 env:
   REGISTRY: ghcr.io
