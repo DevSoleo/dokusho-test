@@ -4,7 +4,7 @@ const logs = require('./logs')
 
 exports.io = null
 
-exports.wait = (server) => {
+exports.handle = (server) => {
     this.io = new Server(server)
 
     let User = mongodb.models.User
@@ -14,14 +14,14 @@ exports.wait = (server) => {
         socket.on('ask_for_create_user', (infos, callback) => {
             let [username, first_name, last_name, birthday, phone, email] = infos
 
-            User.findOne({ username: username }, {}, function(err, arr) {
+            User.findOne({ username: username }, {}).then((arr) => {
                 if (arr == null) {
                     if (/^([a-zA-Z0-9]*)$/.test(username)) {
-                        User.create({ username: username.toLowerCase().trim(), infos: { first_name: first_name, last_name: last_name, birthday: birthday, phone: phone, email: email }, status: 0, offers_end: 0, time_bank: 0 }, () => {})
-                    
-                        logs.logUserEvent(username, `Création de l'utilisateur ${username} !`)
+                        User.create({ username: username.toLowerCase().trim(), infos: { first_name: first_name, last_name: last_name, birthday: birthday, phone: phone, email: email }, status: 0, offers_end: 0, time_bank: 0 }).finally(() => {
+                            logs.logUserEvent(username, `Création de l'utilisateur ${username} !`)
                         
-                        callback('success')
+                            callback('success')
+                        })
                     } else {
                         callback('error', 'invalid_character')
                     }
@@ -32,14 +32,15 @@ exports.wait = (server) => {
         })
 
         socket.on('ask_for_login_user', (username, callback) => {
-            User.findOne({ username: username }, {}, function(err, arr){		
+            User.findOne({ username: username }, {}).then((arr) => {
                 if (arr != null) {
                     if (arr['status'] == 0) {
                         if (arr['time_bank'] > 0 || arr['offers_end'] > Date.now()) {
-                            User.updateOne({ username: username }, { status: 1 }, {}, function() {})
-                            logs.logUserEvent(username, `Connexion de ${username} avec ${arr['time_bank']}ms de temps`)
+                            User.updateOne({ username: username }, { status: 1 }).finally(() => {
+                                logs.logUserEvent(username, `Connexion de ${username} avec ${logs.formatDuration(arr['time_bank'])} de temps`)
 
-                            callback('success')
+                                callback('success')
+                            })
                         } else {
                             callback('error', 'no_time_remaining')
                         }
@@ -53,14 +54,14 @@ exports.wait = (server) => {
         })
 
         socket.on('ask_for_logout_user', (username, callback) => {
-            User.findOne({ username: username }, {}, function(err, arr){			
+            User.findOne({ username: username }, {}).then((arr) => {
                 if (arr != null) {
                     if (arr['status'] == 1 || arr['status'] == 2) {
-                        User.updateOne({ username: username }, { status: 0 }, {}, function() {})
+                        User.updateOne({ username: username }, { status: 0 }).finally(() => {
+                            logs.logUserEvent(username, `Déconnexion de ${username} avec ${logs.formatDuration(arr['time_bank'])} de temps`)
                         
-                        logs.logUserEvent(username, `Déconnexion de ${username} avec ${arr['time_bank']}ms de temps`)
-                        
-                        callback('success')
+                            callback('success')
+                        })
                     } else {
                         callback('error', 'already_connected')
                     }
@@ -74,12 +75,12 @@ exports.wait = (server) => {
             let username = infos[0]
             let time = parseInt(infos[1])
 
-            User.findOne({ username: username }, {}, function(err, arr){			
+            User.findOne({ username: username }, {}).then((arr) => {		
                 if (arr != null) {
-                    User.updateOne({ username: username }, { $inc: { time_bank: time } }, {}, function() {})
-                    logs.logUserEvent(username, `Ajout de ${time}ms à ${logs.C_UNDERSCORE + username + logs.C_RESET} (nouveau solde : ${arr['time_bank'] + time}ms)`)
-               
-                    callback('success')
+                    User.updateOne({ username: username }, { $inc: { time_bank: time } }).finally(() => {
+                        logs.logUserEvent(username, `Ajout de ${time}ms à ${logs.C_UNDERSCORE + username + logs.C_RESET} (nouveau solde : ${logs.formatDuration(arr['time_bank'])})`)
+                        callback('success')
+                    })
                 } else {
                     callback('error')
                 }
@@ -87,17 +88,22 @@ exports.wait = (server) => {
         })
 
         socket.on('ask_for_toggle_pause', (username, callback) => {
-            User.findOne({ username: username }, {}, function(err, arr){			
+            User.findOne({ username: username }, {}).then((arr) => {
                 if (arr != null) {
+                    console.log(arr['status'])
                     if (arr['status'] == 2) {
-                        User.updateOne({ username: username }, { status: 1 }, {}, function() {})
-                        logs.logUserEvent(username, `Reprise du décompte du temps de ${logs.C_UNDERSCORE + username + logs.C_RESET}`)
+                        User.updateOne({ username: username }, { status: 1 }).finally(() => {
+                            logs.logUserEvent(username, `Reprise du décompte du temps de ${logs.C_UNDERSCORE + username + logs.C_RESET}`)
+                        
+                            callback('success')
+                        })
                     } else {
-                        User.updateOne({ username: username }, { status: 2 }, {}, function() {})
-                        logs.logUserEvent(username, `Mise en pause du décompte du temps de ${logs.C_UNDERSCORE + username + logs.C_RESET}`)
+                        User.updateOne({ username: username }, { status: 2 }).finally(() => {
+                            logs.logUserEvent(username, `Mise en pause du décompte du temps de ${logs.C_UNDERSCORE + username + logs.C_RESET}`)
+                        
+                            callback('success')
+                        })
                     }
-
-                    callback('success')
                 } else {
                     callback('error')
                 }
@@ -120,16 +126,16 @@ exports.wait = (server) => {
             }
 
             if (duration != 0) {
-                User.findOne({ username: username }, {}, function(err, arr) {
+                User.findOne({ username: username }, {}).then((arr) => {
                     if (arr != null) {
                         if (arr['offers_end'] == 0) {
                             let offers_end = Date.now() + duration
 
-                            User.updateOne({ username: username }, { offers_end: offers_end}, {}, function() {})
+                            User.updateOne({ username: username }, { offers_end: offers_end}).finally(() => {
+                                logs.logUserEvent(username, `Activation de l'offre ${offer_name} à ${username} (date de fin : ${offers_end})`)
                             
-                            logs.logUserEvent(username, `Activation de l'offre ${offer_name} à ${username} (date de fin : ${offers_end})`)
-                            
-                            callback('success')
+                                callback('success')
+                            })
                         } else {
                             callback('error', 'remaining_active_offer')
                         }
@@ -143,14 +149,14 @@ exports.wait = (server) => {
         })
 
         socket.on('ask_for_remove_offer', (username, callback) => {
-            User.findOne({ username: username }, {}, function(err, arr) {
+            User.findOne({ username: username }, {}).then((arr) => {
                 if (arr != null) {
                     if (arr['offers_end'] != 0) {
-                        User.updateOne({ username: username }, { offers_end: 0 }, {}, function() {})
+                        User.updateOne({ username: username }, { offers_end: 0 }).finally(() => {
+                            logs.logUserEvent(username, `Suppression de l'offre de ${username}.`)
 
-                        logs.logUserEvent(username, `Suppression de l'offre de ${username}.`)
-
-                        callback('success')
+                            callback('success')
+                        })
                     } else {
                         callback('error', 'no_active_offer')
                     }
@@ -161,7 +167,7 @@ exports.wait = (server) => {
         })
 
         socket.on('ask_for_users_list', () => {
-            User.find({}, (err, arr) => {
+            User.find({}).then((arr) => {
                 socket.emit('users_list', arr)
             })
         })
@@ -171,11 +177,11 @@ exports.wait = (server) => {
             let content = infos[1]
 
             if (type == "first_name") {
-                User.find({ "infos.first_name": content }, (err, arr) => {
+                User.find({ "infos.first_name": content }).then((arr) => {
                     callback(arr)
                 })
             } else if (type == "last_name") {
-                User.find({ "infos.last_name": { $eq: content }}, (err, arr) => {
+                User.find({ "infos.last_name": { $eq: content }}).then((arr) => {
                     callback(arr)
                 })
             }

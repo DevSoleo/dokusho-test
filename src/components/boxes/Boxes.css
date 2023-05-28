@@ -1,0 +1,61 @@
+.box {
+    width: calc(200px - 24px);
+    height: calc(200px - 24px);
+    border-radius: 16px;
+
+    margin: 12px;
+    padding: 12px;
+    float: left;
+
+    background-color: #4cb9b0;
+}
+
+.box.no-time {
+    color: white;
+    background-color: #B71C1C;
+}
+
+.box.paused {
+    background-color: #FFC107;
+}
+
+.box span.username, .box span.bank {
+    text-align: center;
+    width: 100%;
+    display: block;
+    padding: 4px 0;
+}
+
+.box button.interaction {
+    width: 100%;
+    border: none;
+    font-size: 14px;
+    margin-top: 6px;
+    cursor: pointer;
+}
+
+.login-box {
+    vertical-align: top;
+    border-radius: 16px;
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.box.login-box span {
+    font-size: 40px;
+    padding: 12px;
+    margin: auto;
+    color: white;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .box {
+        color: white;
+        background-color: #30706a;
+    }
+
+    .box.paused {
+        background-color: #d09c00d6;
+    }
+}

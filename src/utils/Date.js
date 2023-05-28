@@ -16,7 +16,7 @@ export default function formatDate(duration) {
     if (seconds != 0) result += seconds + "s"
     if (seconds == 0) result += "00s"
 
-    if (result == "") result = "0s"
+    if (result == "" || result == "00s") result = "0s"
 
     return result
 }

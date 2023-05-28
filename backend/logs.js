@@ -52,6 +52,40 @@ function getFormattedDate() {
     return date + " " + time
 }
 
+exports.formatDuration = (duration) => {
+    const seconds = Math.floor(duration / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+  
+    const remainingSeconds = seconds % 60;
+    const remainingMinutes = minutes % 60;
+    const remainingHours = hours % 24;
+  
+    const durationParts = [
+      { value: days, label: 'j' },
+      { value: remainingHours, label: 'h' },
+      { value: remainingMinutes, label: 'm' },
+      { value: remainingSeconds, label: 's' },
+    ];
+  
+    let formattedDuration = '';
+    let hasValue = false;
+  
+    for (let i = 0; i < durationParts.length; i++) {
+      const { value, label } = durationParts[i];
+      if (value > 0 || (i === durationParts.length - 1 && !hasValue)) {
+        if (hasValue) {
+          formattedDuration += ' ';
+        }
+        formattedDuration += `${value}${label}`;
+        hasValue = true;
+      }
+    }
+  
+    return formattedDuration + ` (soit ${duration}ms)`
+  }
+
 exports.log = (source, content, file_path) => {
     let log_marker = `[${getFormattedDate()}] [${source}] `
 

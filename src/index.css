@@ -13,3 +13,9 @@ div.clients {
 
     display: inline-block;
 }
+
+@media (prefers-color-scheme: dark) {
+    body, html {
+        background: #161625;
+    }
+}
