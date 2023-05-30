@@ -3,7 +3,7 @@ import './Boxes.css'
 import ClientApi from '../../api/ClientApi'
 
 export default function LoginBox() {
-  function promtUsername() {
+  function promptUsername() {
     const username = prompt("Username :")
     
     if (username) {
@@ -12,7 +12,7 @@ export default function LoginBox() {
   }
 
   return (
-    <div className="box login-box" onClick={() => {promtUsername()}}>
+    <div className="box login-box" onClick={() => {promptUsername()}}>
       <span>+</span>
     </div>
   )

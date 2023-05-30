@@ -4,6 +4,10 @@
     font-family: 'Open Sans', sans-serif;
 }
 
+button {
+    cursor: pointer;
+}
+
 div.clients {
     position: absolute;
     top: 0;

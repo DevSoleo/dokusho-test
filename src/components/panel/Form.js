@@ -1,11 +1,10 @@
+import './Panel.css'
 
 export default function Form({children, title}) {
     return (
       <div className="form">
-        { title }
-        <br />
+        <span className="title">{ title }</span>
         { children }
-        <button onClick={() => socket.emit()}>Valider</button>
       </div>
     )
 }

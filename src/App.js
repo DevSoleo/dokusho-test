@@ -25,15 +25,15 @@ export default function App() {
         <LoginBox />
       </div>
       <ControlPanel>
-        <Form title='Mon formulaire'>
-          <input type="text" placeholder="Username" />
+        <Form title='Nouvel utilisateur'>
+          <input type="text" placeholder="Prénom" />
+          <input type="text" placeholder="Nom" />
+          <input type="email" placeholder="Adresse e-mail" />
           <input type="password" placeholder="Password" />
-          <button onClick={() => socket.emit('sync')}>Sync</button>
-        </Form>
-        <Form title='Mon formulaire'>
-          <input type="text" placeholder="Username" />
-          <input type="password" placeholder="Password" />
-          <button onClick={() => socket.emit('sync')}>Sync</button>
+          
+          <br />
+
+          <button onClick={() => {}}>Créer</button>
         </Form>
       </ControlPanel>
     </div>

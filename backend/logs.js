@@ -42,8 +42,7 @@ function isDaylightSavingTime(date) {
 }
 
 function getFormattedDate() {
-
-    let now = new Date(Date.now());
+    let now = new Date(Date.now())
         now.setUTCHours(now.getUTCHours() + (isDaylightSavingTime(now) ? 2 : 1));
 
     const date = addZero(now.getDate()) + "-" + addZero(now.getMonth() + 1) + "-" + now.getFullYear()
@@ -84,7 +83,7 @@ exports.formatDuration = (duration) => {
     }
   
     return formattedDuration + ` (soit ${duration}ms)`
-  }
+}
 
 exports.log = (source, content, file_path) => {
     let log_marker = `[${getFormattedDate()}] [${source}] `

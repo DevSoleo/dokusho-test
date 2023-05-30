@@ -1,4 +1,4 @@
-import './ControlPanel.css'
+import './Panel.css'
 
 export default function ControlPanel({children}) {
   return (

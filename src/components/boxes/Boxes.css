@@ -1,3 +1,13 @@
+.boxes {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 70%;
+
+    display: inline-block;
+}
+
 .box {
     width: calc(200px - 24px);
     height: calc(200px - 24px);
@@ -31,7 +41,6 @@
     border: none;
     font-size: 14px;
     margin-top: 6px;
-    cursor: pointer;
 }
 
 .login-box {

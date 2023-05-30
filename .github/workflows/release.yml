@@ -1,34 +1,34 @@
 name: Scan code and Build Docker image
 
 on:
-  workflow_dispatch:
   push:
     tags:
+      - 1.*
       - 2.*
-
+      
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  #sonarqube:
-    #name: Build
-    #runs-on: ubuntu-latest
-    #steps:
-    #  - uses: actions/checkout@v2
-    #    with:
-    #      fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-    #  - uses: sonarsource/sonarqube-scan-action@master
-    #    env:
-    #      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    #      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-    #  - uses: sonarsource/sonarqube-quality-gate-action@master
-    #    timeout-minutes: 5
-    #    env:
-    #      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  sonarqube:
+    name: Sonarqube scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           
   build-image:
-    # needs: sonarqube
+    needs: sonarqube
     runs-on: ubuntu-latest
 
     permissions:
@@ -66,5 +66,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/devsoleo/testq:latest
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
