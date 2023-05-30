@@ -12,4 +12,4 @@ EXPOSE 3000
 
 ENV MONGO_DB_HOST 'localhost'
 
-CMD [ 'npm', 'start' ]
+CMD [ "npm", "start" ]
