@@ -1,7 +1,7 @@
 .boxes {
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
 
     width: 70%;
 
@@ -65,6 +65,6 @@
     }
 
     .box.paused {
-        background-color: #d09c00d6;
+        background-color: #D89216;
     }
 }

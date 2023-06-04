@@ -20,6 +20,7 @@ div.clients {
 
 @media (prefers-color-scheme: dark) {
     body, html {
-        background: #161625;
+        background: #222831;
+        color: white;
     }
 }

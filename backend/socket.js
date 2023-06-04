@@ -10,7 +10,9 @@ exports.handle = (server) => {
     let User = mongodb.models.User
 
     this.io.on('connection', (socket) => {
+        
         console.log('Nouvelle connexion')
+        
         socket.on('ask_for_create_user', (infos, callback) => {
             let [username, first_name, last_name, birthday, phone, email] = infos
 

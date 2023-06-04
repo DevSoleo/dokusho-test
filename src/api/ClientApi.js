@@ -6,6 +6,20 @@ class ClientApi {
         this.socket = socket
     }
 
+    create_user(infos) {
+        this.socket.emit("ask_for_create_user", infos, (type, reason) => {
+            if (type == "success") {
+                alert("Succès ! Cet utilisateur a bien été créé !")
+            } else if (type == "error") {
+                if (reason == "invalid_character") {
+                    alert("Erreur ! Le username contient un caractère invalide !")
+                } else if (reason == "user_already_exist") {
+                    alert("Erreur ! Cet utilisateur existe déjà !")
+                }
+            }
+        })
+    }
+
     toggle_pause_user(username) {
         this.socket.emit("ask_for_toggle_pause", username, (type) => {
             if (type == "error") {

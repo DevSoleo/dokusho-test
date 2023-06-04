@@ -1,15 +1,41 @@
 /* Panel */
 .control-panel {
     padding: 20px;
-    width: calc(30% - 40px);
+    width: calc(30% - 60px);
     height: 100%;
+
+    background-color: white;
 
     position: absolute;
     bottom: 0;
     top: 0;
-    right: 0;
-    border-left: 1px solid black;
+    left: 0;
+    box-shadow: 2px 0 8px 0 rgba(0, 0, 0, 0.2);
 }
+
+.back {
+    cursor: pointer;
+    width: max-content;
+}
+
+.back:hover {
+    opacity: 0.6;
+}
+
+.back .back-text {
+    position: relative;
+    top: -6px;
+    left: 4px;
+    user-select: none;
+}
+
+/* Panel - Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .control-panel {
+        background-color: #393E46;
+    }
+}
+
 
 /* Form */
 
@@ -23,12 +49,78 @@
     display: block;
 }
 
-.form button {
-    margin: 8px;
-    width: calc(100% - 16px);
+div.form input[type="date"] {
+    cursor: text;
 }
 
-.form input {
-    width: calc(100% - 16px - 8px);
-    margin: 8px;
+div.form input[type=text], 
+div.form input[type=email], 
+div.form input[type="date"] {
+    width: calc(100% - 16px);
+    background: transparent;
+    margin: 8px 0;
+    border: 1.5px solid black;
+    padding: 8px 12px;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+
+div.form input[type=text]:focus, 
+div.form input[type=email]:focus {
+    border-color: #4cb9b0;
+}
+
+div.form select {
+    margin: 8px 0;
+    width: calc(100% + 10px);
+    outline: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: white;
+    font-weight: 600;
+    background: transparent;
+    border: 1.5px solid black;
+    cursor: pointer;    
+}
+
+div.form select option {
+    background: #393E46;
+    cursor: pointer;
+}
+
+div.form select option:not(:disabled) {
+    color: white;
+}
+
+div.form button {
+    margin: 8px 0;
+    width: calc(100% + 10px);
+    background: #4cb9b0;
+    outline: none;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: white;
+    font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+    div.form input[type=text], 
+    div.form input[type=email], 
+    div.form input[type="date"] {
+        color: white;
+        border-color: white;
+    }
+
+    div.form button {
+        background:#30706a ;
+    }
+
+    div.form select {
+        color: #a4a6aa;
+        border-color: white;
+    }
 }
